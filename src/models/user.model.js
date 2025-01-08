@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -26,7 +26,7 @@ const userSchema = new Schema(
       trim: true,
     },
     avatar: {
-      type: true,
+      type: String,
       required: true,
     },
     coverImage: {
@@ -52,7 +52,7 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  if (!this.modified("password")) return next();
+  if (!this.isModified("password")) return next();
 
   this.password = bcrypt.hash(this.password, 10);
 
